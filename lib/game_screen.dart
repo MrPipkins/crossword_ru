@@ -85,39 +85,62 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     return [const Color(0xFF283593), const Color(0xFF3F51B5), const Color(0xFF9FA8DA)];
   }
 
+  String get _backgroundImage {
+    final id = widget.level.id;
+    if (id <= 5) return 'assets/backgrounds/bg1.jpg';
+    if (id <= 10) return 'assets/backgrounds/bg2.jpg';
+    if (id <= 15) return 'assets/backgrounds/bg3.jpg';
+    if (id <= 20) return 'assets/backgrounds/bg4.jpg';
+    if (id <= 25) return 'assets/backgrounds/bg5.jpg';
+    return 'assets/backgrounds/bg6.jpg';
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = _themeColors;
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [colors[0], colors[1], colors[2]],
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+            _backgroundImage,
+            fit: BoxFit.cover,
           ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(),
-              Expanded(flex: 5, child: _buildGrid()),
-              const SizedBox(height: 8),
-              Text(
-                currentWord,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 4,
-                ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  colors[0].withValues(alpha: 0.5),
+                  colors[1].withValues(alpha: 0.3),
+                  colors[2].withValues(alpha: 0.5),
+                ],
               ),
-              const SizedBox(height: 8),
-              Expanded(flex: 5, child: _buildLetterCircle()),
-              const SizedBox(height: 16),
-            ],
+            ),
           ),
-        ),
+          SafeArea(
+            child: Column(
+              children: [
+                _buildHeader(),
+                Expanded(flex: 5, child: _buildGrid()),
+                const SizedBox(height: 8),
+                Text(
+                  currentWord,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 4,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Expanded(flex: 5, child: _buildLetterCircle()),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
