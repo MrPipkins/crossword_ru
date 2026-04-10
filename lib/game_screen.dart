@@ -73,20 +73,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             const Text('Подсказка', style: TextStyle(fontSize: 22)),
           ],
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              hint,
-              style: const TextStyle(fontSize: 18, height: 1.4),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              '${wp.word.length} букв, начинается на «${wp.word[0]}»',
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-            ),
-          ],
+        content: Text(
+          hint,
+          style: const TextStyle(fontSize: 18, height: 1.4),
         ),
         actions: [
           TextButton(
@@ -210,9 +199,10 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
           ),
           const Spacer(),
           IconButton(
-            icon: const Icon(Icons.lightbulb_outline, color: Colors.white),
+            icon: const Icon(Icons.lightbulb_outline, color: Colors.amber, size: 32),
             onPressed: _showHint,
             tooltip: 'Подсказка',
+            iconSize: 32,
           ),
         ],
       ),
