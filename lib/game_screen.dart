@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'models.dart';
+import 'hints.dart';
 
 class GameScreen extends StatefulWidget {
   final LevelData level;
@@ -49,6 +50,52 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         return;
       }
     }
+  }
+
+  void _showHint() {
+    final unguessed = widget.level.words
+        .where((wp) => !foundWords.contains(wp.word))
+        .toList();
+    if (unguessed.isEmpty) return;
+    final wp = unguessed[Random().nextInt(unguessed.length)];
+    final hint = wordHints[wp.word] ?? 'Слово из ${wp.word.length} букв';
+    final colors = _themeColors;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Icon(Icons.lightbulb, color: colors[0], size: 28),
+            const SizedBox(width: 8),
+            const Text('Подсказка', style: TextStyle(fontSize: 22)),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              hint,
+              style: const TextStyle(fontSize: 18, height: 1.4),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '${wp.word.length} букв, начинается на «${wp.word[0]}»',
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Понятно', style: TextStyle(fontSize: 16)),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showCompleteDialog() {
@@ -162,7 +209,11 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             ),
           ),
           const Spacer(),
-          const SizedBox(width: 48),
+          IconButton(
+            icon: const Icon(Icons.lightbulb_outline, color: Colors.white),
+            onPressed: _showHint,
+            tooltip: 'Подсказка',
+          ),
         ],
       ),
     );
