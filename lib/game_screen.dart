@@ -5,8 +5,9 @@ import 'models.dart';
 class GameScreen extends StatefulWidget {
   final LevelData level;
   final VoidCallback onComplete;
+  final int bgIndex;
 
-  const GameScreen({super.key, required this.level, required this.onComplete});
+  const GameScreen({super.key, required this.level, required this.onComplete, this.bgIndex = 0});
 
   @override
   State<GameScreen> createState() => _GameScreenState();
@@ -75,25 +76,22 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     );
   }
 
-  List<Color> get _themeColors {
-    final id = widget.level.id;
-    if (id <= 5) return [const Color(0xFF1565C0), const Color(0xFF42A5F5), const Color(0xFF90CAF9)];
-    if (id <= 10) return [const Color(0xFF4A148C), const Color(0xFF7B1FA2), const Color(0xFFCE93D8)];
-    if (id <= 15) return [const Color(0xFFAD1457), const Color(0xFFE91E63), const Color(0xFFF48FB1)];
-    if (id <= 20) return [const Color(0xFF00695C), const Color(0xFF00897B), const Color(0xFF80CBC4)];
-    if (id <= 25) return [const Color(0xFFE65100), const Color(0xFFFB8C00), const Color(0xFFFFCC80)];
-    return [const Color(0xFF283593), const Color(0xFF3F51B5), const Color(0xFF9FA8DA)];
-  }
+  static const _allThemes = [
+    [Color(0xFF1565C0), Color(0xFF42A5F5), Color(0xFF90CAF9)],
+    [Color(0xFF4A148C), Color(0xFF7B1FA2), Color(0xFFCE93D8)],
+    [Color(0xFFAD1457), Color(0xFFE91E63), Color(0xFFF48FB1)],
+    [Color(0xFFE65100), Color(0xFFFB8C00), Color(0xFFFFCC80)],
+  ];
 
-  String get _backgroundImage {
-    final id = widget.level.id;
-    if (id <= 5) return 'assets/backgrounds/bg1.jpg';
-    if (id <= 10) return 'assets/backgrounds/bg2.jpg';
-    if (id <= 15) return 'assets/backgrounds/bg3.jpg';
-    if (id <= 20) return 'assets/backgrounds/bg4.jpg';
-    if (id <= 25) return 'assets/backgrounds/bg5.jpg';
-    return 'assets/backgrounds/bg6.jpg';
-  }
+  static const _backgrounds = [
+    'assets/backgrounds/bg1.jpg',
+    'assets/backgrounds/bg2.jpg',
+    'assets/backgrounds/bg3.jpg',
+    'assets/backgrounds/bg4.jpg',
+  ];
+
+  List<Color> get _themeColors => _allThemes[widget.bgIndex % _allThemes.length];
+  String get _backgroundImage => _backgrounds[widget.bgIndex % _backgrounds.length];
 
   @override
   Widget build(BuildContext context) {
